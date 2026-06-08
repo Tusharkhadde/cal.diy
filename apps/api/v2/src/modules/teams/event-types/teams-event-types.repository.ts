@@ -10,6 +10,52 @@ export class TeamsEventTypesRepository {
     private readonly dbWrite: PrismaWriteService
   ) {}
 
+  private readonly safeUserSelect = {
+    select: {
+      id: true,
+      name: true,
+      username: true,
+      isPlatformManaged: true,
+      avatarUrl: true,
+      brandColor: true,
+      darkBrandColor: true,
+      weekStart: true,
+      metadata: true,
+      organizationId: true,
+      organization: {
+        select: { slug: true },
+      },
+      movedToProfile: {
+        select: {
+          id: true,
+          username: true,
+          organizationId: true,
+          organization: {
+            select: {
+              id: true,
+              slug: true,
+              isPlatform: true,
+            },
+          },
+        },
+      },
+      profiles: {
+        select: {
+          id: true,
+          username: true,
+          organizationId: true,
+          organization: {
+            select: {
+              id: true,
+              slug: true,
+              isPlatform: true,
+            },
+          },
+        },
+      },
+    },
+  } as const;
+
   async getTeamEventType(teamId: number, eventTypeId: number) {
     return this.dbRead.prisma.eventType.findUnique({
       where: {
@@ -17,7 +63,7 @@ export class TeamsEventTypesRepository {
         teamId,
       },
       include: {
-        users: true,
+        users: this.safeUserSelect,
         schedule: true,
         hosts: true,
         destinationCalendar: true,
@@ -35,7 +81,7 @@ export class TeamsEventTypesRepository {
         },
       },
       include: {
-        users: true,
+        users: this.safeUserSelect,
         schedule: true,
         hosts: hostsLimit
           ? {
@@ -79,7 +125,7 @@ export class TeamsEventTypesRepository {
           slug: eventTypeSlug,
         },
       },
-      include: { owner: true, team: true },
+      include: { owner: this.safeUserSelect, team: true },
     });
   }
 
@@ -90,7 +136,7 @@ export class TeamsEventTypesRepository {
       },
       ...(sortCreatedAt && { orderBy: { id: sortCreatedAt } }),
       include: {
-        users: true,
+        users: this.safeUserSelect,
         schedule: true,
         hosts: true,
         destinationCalendar: true,
@@ -115,7 +161,7 @@ export class TeamsEventTypesRepository {
     return this.dbRead.prisma.eventType.findUnique({
       where: { id: eventTypeId },
       include: {
-        users: true,
+        users: this.safeUserSelect,
         schedule: true,
         hosts: true,
         destinationCalendar: true,
@@ -127,7 +173,7 @@ export class TeamsEventTypesRepository {
   async getEventTypeChildren(eventTypeId: number) {
     return this.dbRead.prisma.eventType.findMany({
       where: { parentId: eventTypeId },
-      include: { users: true, schedule: true, hosts: true, destinationCalendar: true },
+      include: { users: this.safeUserSelect, schedule: true, hosts: true, destinationCalendar: true },
     });
   }
 

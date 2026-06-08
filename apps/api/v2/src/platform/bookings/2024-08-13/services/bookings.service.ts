@@ -84,7 +84,7 @@ const eventTypeBookingFieldSchema = z
 
 export const eventTypeBookingFieldsSchema = z.array(eventTypeBookingFieldSchema);
 
-export type EventTypeWithOwnerAndTeam = EventType & { owner: User | null; team: Team | null };
+export type EventTypeWithOwnerAndTeam = EventType & { owner: Pick<User, 'id'> | null; team: Team | null };
 
 @Injectable()
 export class BookingsService_2024_08_13 {

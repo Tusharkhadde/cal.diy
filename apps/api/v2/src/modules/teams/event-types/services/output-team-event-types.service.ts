@@ -6,17 +6,44 @@ import type {
   DestinationCalendar,
   EventType,
   Host,
+  Prisma,
   Schedule,
   Team,
-  User,
 } from "@calcom/prisma/client";
 import { Injectable } from "@nestjs/common";
 import { OutputEventTypesService_2024_06_14 } from "@/platform/event-types/event-types_2024_06_14/services/output-event-types.service";
 import { TeamsEventTypesRepository } from "@/modules/teams/event-types/teams-event-types.repository";
 import { UsersRepository } from "@/modules/users/users.repository";
 
+// Matches the fields selected by safeUserSelect in TeamsEventTypesRepository
+type SafeUser = {
+  id: number;
+  name: string | null;
+  username: string | null;
+  isPlatformManaged: boolean;
+  avatarUrl: string | null;
+  brandColor: string | null;
+  darkBrandColor: string | null;
+  weekStart: string;
+  metadata: Prisma.JsonValue;
+  organizationId: number | null;
+  organization: { slug: string | null } | null;
+  movedToProfile: {
+    id: number;
+    username: string | null;
+    organizationId: number | null;
+    organization: { id: number; slug: string | null; isPlatform: boolean } | null;
+  } | null;
+  profiles: {
+    id: number;
+    username: string | null;
+    organizationId: number | null;
+    organization: { id: number; slug: string | null; isPlatform: boolean } | null;
+  }[];
+};
+
 type EventTypeRelations = {
-  users: User[];
+  users: SafeUser[];
   schedule: Schedule | null;
   hosts: Host[];
   destinationCalendar?: DestinationCalendar | null;
