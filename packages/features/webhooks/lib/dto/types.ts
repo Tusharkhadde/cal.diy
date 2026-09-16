@@ -547,7 +547,6 @@ export type EventPayloadType = CalendarEvent &
     cancelledBy?: string;
     paymentData?: Record<string, unknown>;
     requestReschedule?: boolean;
-    rootBookingUid?: string | null;
   };
 
 // dto/types.ts

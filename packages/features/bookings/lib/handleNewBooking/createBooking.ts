@@ -7,7 +7,7 @@ import type { CreationSource } from "@calcom/prisma/enums";
 import { BookingStatus } from "@calcom/prisma/enums";
 import type { CalendarEvent } from "@calcom/types/Calendar";
 import type short from "short-uuid";
-import { getRootBookingUidForCreate } from "../getRootBookingUid";
+import { getRootBookingUid } from "../getRootBookingUid";
 import type { TgetBookingDataSchema } from "../getBookingDataSchema";
 import type { AwaitedBookingData, EventTypeId } from "./getBookingData";
 import type { NewBookingEventType } from "./getEventTypesFromDB";
@@ -205,10 +205,9 @@ function buildNewBookingData(params: CreateBookingParams) {
     dynamicGroupSlugRef: !eventType.id ? (reqBody.user as string).toLowerCase() : null,
     iCalUID: evt.iCalUID ?? "",
     iCalSequence: originalRescheduledBooking ? evt.iCalSequence || 1 : 0,
-    rootBookingUid: getRootBookingUidForCreate({
-      newUid: uid,
-      originalRescheduledBooking,
-    }),
+    rootBookingUid: originalRescheduledBooking
+      ? getRootBookingUid(originalRescheduledBooking)
+      : uid,
     user: {
       connect: {
         id: eventType.organizerUser.id,

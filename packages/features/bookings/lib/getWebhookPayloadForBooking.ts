@@ -1,8 +1,6 @@
 import type { EventPayloadType, EventTypeInfo } from "@calcom/features/webhooks/lib/sendPayload";
 import type { CalendarEvent } from "@calcom/types/Calendar";
 
-import { getRootBookingUid } from "./getRootBookingUid";
-
 export const getWebhookPayloadForBooking = ({
   booking,
   evt,
@@ -20,8 +18,6 @@ export const getWebhookPayloadForBooking = ({
     id: number;
     eventTypeId: number | null;
     userId: number | null;
-    uid?: string;
-    rootBookingUid?: string | null;
   };
   evt: CalendarEvent;
 }) => {
@@ -38,9 +34,6 @@ export const getWebhookPayloadForBooking = ({
     ...evt,
     ...eventTypeInfo,
     bookingId: booking.id,
-    rootBookingUid: booking.uid
-      ? getRootBookingUid({ uid: booking.uid, rootBookingUid: booking.rootBookingUid ?? evt.rootBookingUid })
-      : evt.rootBookingUid,
   };
 
   return payload;

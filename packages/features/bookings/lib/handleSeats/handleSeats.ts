@@ -115,7 +115,7 @@ const handleSeats = async (
       uid: resultBooking?.uid || uid,
       rootBookingUid: getRootBookingUid({
         uid: resultBooking?.uid || uid,
-        rootBookingUid: seatedBooking.rootBookingUid ?? originalRescheduledBooking?.rootBookingUid,
+        rootBookingUid: seatedBooking.rootBookingUid,
       }),
       bookingId: seatedBooking?.id,
       attendeeSeatId: resultBooking?.seatReferenceUid,

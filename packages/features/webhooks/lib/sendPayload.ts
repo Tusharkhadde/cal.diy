@@ -145,7 +145,7 @@ function getZapierPayload(data: WithUTCOffsetType<EventPayloadType & { createdAt
 
   const body = {
     uid: data.uid,
-    rootBookingUid: data.rootBookingUid,
+    rootBookingUid: data.rootBookingUid || data.uid,
     title: data.title,
     description: data.description,
     customInputs: data.customInputs,
