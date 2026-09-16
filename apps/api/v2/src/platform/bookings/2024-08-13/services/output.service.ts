@@ -64,6 +64,10 @@ export const seatedBookingDataSchema = z
 
 const seatedBookingMetadataSchema = z.object({}).catchall(z.string()).describe("SeatedBookingMetadata");
 
+function getPersistentBookingUid(booking: { uid: string; rootBookingUid?: string | null }) {
+  return booking.rootBookingUid || booking.uid;
+}
+
 type DatabaseUser = { id: number; name: string | null; email: string; username: string | null };
 
 type DatabaseBooking = Booking & {
@@ -114,6 +118,7 @@ export class OutputBookingsService_2024_08_13 {
     const booking = {
       id: databaseBooking.id,
       uid: databaseBooking.uid,
+      rootBookingUid: getPersistentBookingUid(databaseBooking),
       title: databaseBooking.title,
       description: databaseBooking.description,
       hosts: [this.getHost(databaseBooking.user)],
@@ -258,6 +263,7 @@ export class OutputBookingsService_2024_08_13 {
     const booking = {
       id: databaseBooking.id,
       uid: databaseBooking.uid,
+      rootBookingUid: getPersistentBookingUid(databaseBooking),
       title: databaseBooking.title,
       description: databaseBooking.description,
       hosts: [this.getHost(databaseBooking.user)],
@@ -343,6 +349,7 @@ export class OutputBookingsService_2024_08_13 {
     const booking = {
       id: databaseBooking.id,
       uid: databaseBooking.uid,
+      rootBookingUid: getPersistentBookingUid(databaseBooking),
       title: databaseBooking.title,
       description: databaseBooking.description,
       hosts: [this.getHost(databaseBooking.user)],
@@ -471,6 +478,7 @@ export class OutputBookingsService_2024_08_13 {
     const booking = {
       id: databaseBooking.id,
       uid: databaseBooking.uid,
+      rootBookingUid: getPersistentBookingUid(databaseBooking),
       title: databaseBooking.title,
       description: databaseBooking.description,
       hosts: [this.getHost(databaseBooking.user)],
