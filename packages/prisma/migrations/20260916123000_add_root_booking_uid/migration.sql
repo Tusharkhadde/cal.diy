@@ -26,6 +26,3 @@ WHERE b."uid" = br."uid";
 UPDATE "Booking"
 SET "rootBookingUid" = COALESCE("fromReschedule", "uid")
 WHERE "rootBookingUid" IS NULL;
-
--- CreateIndex
-CREATE INDEX "Booking_rootBookingUid_idx" ON "Booking"("rootBookingUid");
